@@ -66,8 +66,40 @@ let getUserInfoById = (userId) => {
         }
     });
 }
+let updateUserData = (data) => {
+    return new Promise(async (resolve, reject) => {
+       try {
+           let user = await db.User.findOne({
+               where: {
+                   id: data.id
+               }
+           });
+           if (user) {
+               if (data.fileImage != '') {
+                   user.image = data.fileImage;
+               } else {
+                   user.image = data.fileImageOld;
+               }
+               user.firstName = data.firstName;
+               user.lastName = data.lastName;
+               user.address = data.address;
+               user.numberPhone = data.phoneNumber;
+               user.gender = data.gender === '1' ? true : false;
+               user.roleId = data.roleId;
+               user.positionId = data.positionId;
+               await user.save();
+               resolve();
+           } else {
+               resolve();
+           }
+       } catch (e) {
+           reject(e);
+       }
+    });
+}
 module.exports = {
     createNewUser: createNewUser,
     getAllUser: getAllUser,
     getUserInfoById: getUserInfoById,
+    updateUserData: updateUserData,
 }
