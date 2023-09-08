@@ -88,7 +88,8 @@ let updateUserData = (data) => {
                user.roleId = data.roleId;
                user.positionId = data.positionId;
                await user.save();
-               resolve();
+               let allUsers = db.User.findAll();
+               resolve(allUsers);
            } else {
                resolve();
            }
